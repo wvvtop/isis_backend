@@ -1,0 +1,22 @@
+package org.planner.goalplanner.dto;
+
+import org.planner.goalplanner.enums.TaskStatus;
+
+public class StatusUpdateRequest {
+
+    private TaskStatus status;
+
+    public StatusUpdateRequest() {}
+
+    public StatusUpdateRequest(TaskStatus status) {
+        this.status = status;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+}
