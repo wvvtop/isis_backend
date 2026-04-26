@@ -5,12 +5,14 @@ import org.planner.goalplanner.domain.Goal;
 import org.planner.goalplanner.domain.Milestone;
 import org.planner.goalplanner.domain.Task;
 import org.planner.goalplanner.domain.User;
-import org.planner.goalplanner.dto.CreateGoalRequest;
-import org.planner.goalplanner.dto.CreateMilestoneRequest;
-import org.planner.goalplanner.dto.DailyTasksDto;
-import org.planner.goalplanner.dto.GoalListDto;
+import org.planner.goalplanner.dto.*;
+import org.planner.goalplanner.dto.goal.CreateGoalRequest;
+import org.planner.goalplanner.dto.goal.DailyTasksDto;
+import org.planner.goalplanner.dto.goal.GoalDto;
+import org.planner.goalplanner.dto.goal.GoalListDto;
 import org.planner.goalplanner.enums.TaskStatus;
 import org.planner.goalplanner.enums.TaskType;
+import org.planner.goalplanner.mapper.GoalMapper;
 import org.planner.goalplanner.repository.GoalRepository;
 import org.planner.goalplanner.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,10 +30,13 @@ public class GoalService {
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
 
+    private final GoalMapper goalMapper;
+
     // Конструктор вместо @RequiredArgsConstructor
-    public GoalService(GoalRepository goalRepository, UserRepository userRepository) {
+    public GoalService(GoalRepository goalRepository, UserRepository userRepository, GoalMapper goalMapper) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
+        this.goalMapper = goalMapper;
     }
 
     public Long createGoal(CreateGoalRequest request, Long userId) {
@@ -53,7 +59,8 @@ public class GoalService {
                 milestone.setTitle(mReq.getTitle());
                 milestone.setDescription(mReq.getDescription());
                 milestone.setOrder(i + 1);
-
+                milestone.setStartDate(mReq.getStartDate());
+                milestone.setEndDate(mReq.getEndDate());
                 goal.getMilestones().add(milestone);
 
                 // Создаём задачи для этого этапа
@@ -110,6 +117,19 @@ public class GoalService {
         task.setPlannedDate(plannedDate);
         return task;
     }
+
+    public GoalDto getGoalWithMilestones(Long userId, Long goalId) {
+        Optional<Goal> goal = goalRepository.findByUserIdAndId(userId, goalId);
+        System.out.println(goal.get().getId()   );
+        if(goal.isEmpty())
+            return null;
+
+        GoalDto goalDto = goalMapper.mappingToGoalDto(goal.get());
+
+        return goalDto;
+    }
+
+
 
     public List<GoalListDto> getAllGoals(Long userId) {
         List<Goal> goals = goalRepository.findByUserId(userId);

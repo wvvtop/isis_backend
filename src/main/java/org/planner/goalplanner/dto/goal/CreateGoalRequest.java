@@ -1,7 +1,8 @@
-package org.planner.goalplanner.dto;
+package org.planner.goalplanner.dto.goal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.planner.goalplanner.dto.CreateMilestoneRequest;
 
 import java.time.LocalDate;
 import java.util.List;

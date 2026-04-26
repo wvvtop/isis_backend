@@ -33,6 +33,12 @@ public class Milestone {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
     // обратная связь с Task (опционально)
     @OneToMany(mappedBy = "milestone", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
@@ -94,5 +100,21 @@ public class Milestone {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

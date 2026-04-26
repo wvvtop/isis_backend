@@ -1,4 +1,4 @@
-package org.planner.goalplanner.dto;
+package org.planner.goalplanner.dto.goal;
 
 import java.util.ArrayList;
 import java.util.List;

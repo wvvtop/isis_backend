@@ -1,4 +1,4 @@
-package org.planner.goalplanner.dto;
+package org.planner.goalplanner.dto.goal;
 
 import java.time.LocalDate;
 

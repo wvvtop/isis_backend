@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Long> {
 
     // При необходимости можно добавить кастомные методы, например:
      List<Goal> findByUserId(Long userId);
+     Optional<Goal> findByUserIdAndId(Long userId, Long id);
 }

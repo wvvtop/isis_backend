@@ -1,5 +1,6 @@
 package org.planner.goalplanner.configuration;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,13 +67,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
-        } catch (Exception e) {
-            // Критично: НЕ бросаем исключение, иначе весь запрос падает
-            // Просто логируем и продолжаем без аутентификации
+        } catch (ExpiredJwtException e) {
+            // Токен истёк — отправляем 401
             System.err.println("JWT Filter Error for " + request.getRequestURI() + ": " + e.getMessage());
-            // В продакшене лучше использовать Logger
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token expired\", \"message\": \"" + e.getMessage() + "\"}");
+            return; // прерываем цепочку фильтров
+        } catch (Exception e) {
+            // Другие ошибки (невалидная подпись и т.п.) — тоже 401
+            System.err.println("JWT Filter Error for " + request.getRequestURI() + ": " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid token\", \"message\": \"" + e.getMessage() + "\"}");
+            return;
         }
+//        } catch (Exception e) {
+//            // Критично: НЕ бросаем исключение, иначе весь запрос падает
+//            // Просто логируем и продолжаем без аутентификации
+//            System.err.println("JWT Filter Error for " + request.getRequestURI() + ": " + e.getMessage());
+//            // В продакшене лучше использовать Logger
+//        }
+
 
         filterChain.doFilter(request, response);
     }

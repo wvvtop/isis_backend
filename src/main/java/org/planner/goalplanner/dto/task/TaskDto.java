@@ -1,4 +1,4 @@
-package org.planner.goalplanner.dto;
+package org.planner.goalplanner.dto.task;
 
 import org.planner.goalplanner.enums.TaskStatus;
 import org.planner.goalplanner.enums.TaskType;

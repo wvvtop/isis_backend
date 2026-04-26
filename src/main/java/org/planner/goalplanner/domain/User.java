@@ -26,6 +26,9 @@ public class User {
     private Integer max_main_tasks_per_day = 3;
 
     @Column(nullable = false)
+    private Integer max_side_tasks_per_day = 10;
+
+    @Column(nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();
 
 
@@ -67,5 +70,13 @@ public class User {
 
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
+    }
+
+    public Integer getMax_side_tasks_per_day() {
+        return max_side_tasks_per_day;
+    }
+
+    public void setMax_side_tasks_per_day(Integer max_side_tasks_per_day) {
+        this.max_side_tasks_per_day = max_side_tasks_per_day;
     }
 }

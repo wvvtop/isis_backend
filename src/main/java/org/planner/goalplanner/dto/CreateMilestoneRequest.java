@@ -2,6 +2,8 @@ package org.planner.goalplanner.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.planner.goalplanner.dto.goal.DailyTasksDto;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;

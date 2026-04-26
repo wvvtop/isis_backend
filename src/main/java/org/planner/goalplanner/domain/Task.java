@@ -2,6 +2,8 @@ package org.planner.goalplanner.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 import org.planner.goalplanner.enums.TaskStatus;
 import org.planner.goalplanner.enums.TaskType;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "task")
+@SoftDelete(strategy = SoftDeleteType.DELETED)
 public class Task {
 
     @Id
@@ -48,6 +51,17 @@ public class Task {
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Column(insertable=false, updatable=false)
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // конструкторы, геттеры, сеттеры
     public Task() {}

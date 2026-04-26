@@ -1,14 +1,16 @@
 package org.planner.goalplanner.controller;
 
 import org.planner.goalplanner.dto.StatusUpdateRequest;
-import org.planner.goalplanner.dto.TodayTasksResponse;
+import org.planner.goalplanner.dto.task.TaskDto;
+import org.planner.goalplanner.dto.task.TaskPatchDto;
+import org.planner.goalplanner.dto.task.TodayTasksResponse;
 import org.planner.goalplanner.repository.UserRepository;
-import org.planner.goalplanner.security.UserPrincipal;
 import org.planner.goalplanner.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -51,5 +53,58 @@ public class TaskController {
 
         taskService.updateTaskStatus(taskId, request.getStatus(), userId);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("{taskId}/patch")
+    public ResponseEntity<?> patchTask(
+            @PathVariable Long taskId,
+            @RequestBody TaskPatchDto taskPatchDto,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body("Пользователь не авторизован");
+        }
+        String email = authentication.getName();
+
+        Long userId = userRepository.findByEmail(email).orElseThrow().getId();
+
+        taskService.patchTask(taskId, userId, taskPatchDto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{taskId}/delete")
+    public ResponseEntity<?> deleteTask(
+            @PathVariable Long taskId,
+            Authentication authentication
+    )
+    {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body("Пользователь не авторизован");
+        }
+        String email = authentication.getName();
+
+        Long userId = userRepository.findByEmail(email).orElseThrow().getId();
+
+        taskService.deleteTask(taskId, userId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("{goalId}/get-deleted")
+    public ResponseEntity<List<TaskDto>> getDeletedTasksFromGoal(
+            @PathVariable Long goalId,
+            Authentication authentication
+    ){
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        String email = authentication.getName();
+
+        Long userId = userRepository.findByEmail(email).orElseThrow().getId();
+
+        List<TaskDto> deletedTasks = taskService.getDeletedTasks(userId, goalId);
+
+        return ResponseEntity.ok(deletedTasks);
     }
 }

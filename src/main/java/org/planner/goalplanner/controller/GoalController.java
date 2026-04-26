@@ -1,9 +1,9 @@
 package org.planner.goalplanner.controller;
 
 import jakarta.validation.Valid;
-import org.planner.goalplanner.domain.User;
-import org.planner.goalplanner.dto.CreateGoalRequest;
-import org.planner.goalplanner.dto.GoalListDto;
+import org.planner.goalplanner.dto.goal.CreateGoalRequest;
+import org.planner.goalplanner.dto.goal.GoalDto;
+import org.planner.goalplanner.dto.goal.GoalListDto;
 import org.planner.goalplanner.repository.UserRepository;
 import org.planner.goalplanner.service.GoalService;
 import org.springframework.http.HttpStatus;
@@ -55,5 +55,20 @@ public class GoalController {
 
         List<GoalListDto> goals = goalService.getAllGoals(userId);
         return ResponseEntity.ok(goals);
+    }
+
+    @GetMapping("/{goalId}")
+    public ResponseEntity<GoalDto> getGoalWithMilestones(Authentication authentication, @PathVariable Long goalId) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String email = authentication.getName();
+
+        Long userId = userRepository.findByEmail(email).orElseThrow().getId();
+
+        GoalDto goalDto = goalService.getGoalWithMilestones(userId, goalId);
+
+        return ResponseEntity.ok(goalDto);
     }
 }

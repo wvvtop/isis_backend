@@ -1,4 +1,6 @@
-package org.planner.goalplanner.dto;
+package org.planner.goalplanner.dto.task;
+
+import org.planner.goalplanner.dto.task.TaskDto;
 
 import java.util.List;
 
