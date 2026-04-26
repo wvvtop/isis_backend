@@ -1,0 +1,63 @@
+package org.planner.goalplanner.dto.task;
+
+import org.planner.goalplanner.enums.TaskStatus;
+import org.planner.goalplanner.enums.TaskType;
+
+import java.time.LocalDate;
+
+public class TaskResponse {
+    private Long id;
+    private String title;
+    private TaskType type;
+    private TaskStatus status;
+    private LocalDate plannedDate;
+    private LocalDate completedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public TaskType getType() {
+        return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getPlannedDate() {
+        return plannedDate;
+    }
+
+    public void setPlannedDate(LocalDate plannedDate) {
+        this.plannedDate = plannedDate;
+    }
+
+    public LocalDate getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(LocalDate completedAt) {
+        this.completedAt = completedAt;
+    }
+}
