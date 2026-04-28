@@ -31,6 +31,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();
 
+    @Column(name = "last_active_at")
+    private LocalDateTime lastActiveAt;
 
     public Long getId() {
         return id;
@@ -60,6 +62,7 @@ public class User {
         return max_main_tasks_per_day;
     }
 
+
     public void setMax_main_tasks_per_day(Integer max_main_tasks_per_day) {
         this.max_main_tasks_per_day = max_main_tasks_per_day;
     }
@@ -78,5 +81,13 @@ public class User {
 
     public void setMax_side_tasks_per_day(Integer max_side_tasks_per_day) {
         this.max_side_tasks_per_day = max_side_tasks_per_day;
+    }
+
+    public LocalDateTime getLastActiveAt() {
+        return lastActiveAt;
+    }
+
+    public void setLastActiveAt(LocalDateTime lastActiveAt) {
+        this.lastActiveAt = lastActiveAt;
     }
 }
